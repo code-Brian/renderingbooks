@@ -4,12 +4,14 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.renderingbooks.models.Book;
@@ -39,7 +41,26 @@ public class BookController {
 			return "redirect:/";
 		}
 	}
-	
+	@GetMapping("/{id}/update")
+	public String editForm(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("book",bookServ.getOne(id));
+		return "editBook.jsp";
+	}
+	// This will take us to the edit page, it doesn't actually submit the form and update the book
+	@PutMapping("/{id}/update")
+	// Query the DB and get a book that matches the id
+	// Update the returned book with the data incoming from the form if it is valid
+	// redirect back to home
+	public String update(@Valid @ModelAttribute("book") Book book, BindingResult result, @PathVariable("id") Long id) {
+		if(result.hasErrors()) {
+			return "editBook.jsp";
+		} else {
+			book.setId(id);
+			bookServ.update(book);
+			return "redirect:/";
+		}
+	}
+
 	@DeleteMapping("/{id}")
 	// Find a book via ID
 	// Delete the book and redirect back to home page
@@ -47,4 +68,5 @@ public class BookController {
 		bookServ.deleteById(id);
 		return "redirect:/";
 	}
+
 }
