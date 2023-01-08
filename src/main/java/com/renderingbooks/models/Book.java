@@ -29,9 +29,9 @@ public class Book {
 	private Long id;
 	@Size(min=3)
 	private String title;
-	@Size(min=5)
-	private String description;
 	@Size(min=10)
+	private String description;
+	@Size(min=3)
 	private String language;
 	@Min(100)
 	@NotNull
