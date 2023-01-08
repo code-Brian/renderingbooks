@@ -45,7 +45,7 @@ public class BookService {
 	}
 	
 	// This will delete a book in the DB with the matching ID
-	public void delete(Long id) {
+	public void deleteById(Long id) {
 		bookRepo.deleteById(id);
 	}
 }
